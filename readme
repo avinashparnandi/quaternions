@@ -1,0 +1,26 @@
+% given a quaternion [X, Y, Z] from MR3 that we want to be the “zero” orientation
+zeroQuat = [-0.4067, -0.5282, -0.4345]
+ 
+% the quaternion helper functions require the format [W X Y Z]
+% so we use a helper function calculate W = SQRT(MAX(0,1-(X*X+Y*Y+Z*Z)))
+% and build the full quaternion
+zeroQuat = q3to4(zeroQuat)
+ 
+% now we need to find the inverse of zeroQuat
+calQuat = qinverse(zeroQuat)
+ 
+% now we can transform any further quaternions by calQuat to get a rotation
+% from the zero orientation
+ 
+% first let's check that the zero scheme works by applying it to the quaternion we
+% used to create it.  we should get the identity quaternion (no rotation)
+% [1 0 0 0]
+z = qtransform(zeroQuat, calQuat)
+ 
+% now let's apply it to another quaternion that has a small delta from the
+% zero orientation
+testQuat = [-0.4046             -0.5313  -0.4285]
+testQuat = q3to4(testQuat)
+ 
+% apply zero to find delta from zero orientation
+zeroedTestQuat = qtransform(testQuat, calQuat)
